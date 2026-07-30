@@ -23,12 +23,15 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-dark); line-height: 1.6; }
 
-        header { background-color: var(--text-light); box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-bottom: 1px solid var(--border-color); padding: 15px 20px; }
-        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.4rem; font-weight: 700; color: var(--primary-color); }
+        header { background-color: var(--text-light); box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-bottom: 1px solid var(--border-color); padding: 15px 20px; position: sticky; top: 0; z-index: 1000; }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.3rem; font-weight: 700; color: var(--primary-color); }
 
-        .admin-container { max-width: 1200px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 2fr; gap: 30px; }
-        @media (max-width: 900px) { .admin-container { grid-template-columns: 1fr; } }
+        .btn-nav-orders { background-color: var(--primary-color); border: none; padding: 10px 24px; border-radius: 20px; font-weight: 700; color: white; cursor: pointer; transition: 0.3s; font-size: 0.95rem; box-shadow: 0 4px 10px rgba(212,163,115,0.2); }
+        .btn-nav-orders:hover { background-color: #bd8f62; }
+
+        .admin-container { max-width: 1400px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 2.5fr; gap: 30px; }
+        @media (max-width: 950px) { .admin-container { grid-template-columns: 1fr; } }
 
         .card { background: var(--text-light); padding: 25px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid var(--border-color); height: fit-content; }
         .card h2 { font-size: 1.2rem; color: #4a2c11; margin-bottom: 20px; font-weight: 700; border-bottom: 2px solid var(--bg-color); padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
@@ -41,24 +44,50 @@
         .btn-submit { width: 100%; background-color: var(--primary-color); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem; }
         .btn-submit:hover { background-color: #bd8f62; }
 
-        .btn-danger-sm { background-color: var(--danger-color); color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+        .btn-danger-sm { background-color: var(--danger-color); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
         .btn-danger-sm:hover { opacity: 0.85; }
 
-        .btn-call-sm { background-color: var(--success-color); color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; margin-left: 5px; }
+        .btn-call-sm { background-color: var(--success-color); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; margin-left: 5px; }
         .btn-call-sm:hover { opacity: 0.85; }
 
         .table-responsive { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; text-align: right; font-size: 0.9rem; }
-        th, td { padding: 12px; border-bottom: 1px solid var(--border-color); }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; text-align: right; font-size: 0.95rem; }
+        th, td { padding: 14px; border-bottom: 1px solid var(--border-color); }
         th { background-color: #fcfbfa; color: #4a2c11; font-weight: 700; }
 
         .product-thumb { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
-        .order-badge { background-color: #fbc4ab; color: #582f0e; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 700; margin-right: 5px; display: inline-block; margin-bottom: 4px; }
+        .order-badge { background-color: #fbc4ab; color: #582f0e; padding: 4px 10px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; margin-right: 5px; display: inline-block; margin-bottom: 4px; }
+
+        /* تعديل تكبير وتناسق النافذة المنبثقة (Modal) */
+        .orders-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.45); display: none; justify-content: center;
+            align-items: center; z-index: 2000; padding: 20px;
+        }
+        .orders-modal-box {
+            background-color: white; border-radius: 20px; 
+            width: 95%; max-width: 1350px; /* تم تكبير العرض ليتناسق مع الصفحات الواسعة */
+            height: 85vh; display: flex; flex-direction: column;
+            padding: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+            border: 1px solid var(--border-color); animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--bg-color); padding-bottom: 20px; margin-bottom: 20px; }
+        .modal-header h2 { font-size: 1.5rem; color: #4a2c11; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .btn-close-modal { background-color: #f0eae4; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.95rem; color: #4a2c11; transition: 0.2s; }
+        .btn-close-modal:hover { background-color: #e2d4c9; }
+
+        /* جعل محتوى الجدول داخل المودال يقبل الاسكرول بشكل منفصل */
+        .modal-body-scroll { flex: 1; overflow-y: auto; width: 100%; }
 
         .toast-notification {
             position: fixed; bottom: 20px; right: 20px; background-color: var(--success-color); color: #fff;
             padding: 12px 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            display: none; z-index: 2000; font-weight: 600;
+            display: none; z-index: 3000; font-weight: 600;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -67,6 +96,7 @@
     <header>
         <div class="nav-container">
             <div class="logo">ZEZO Store - لوحة التحكم الإدارية</div>
+            <button id="openOrdersBtn" class="btn-nav-orders">🛍️ عرض الطلبات الواردة</button>
         </div>
     </header>
 
@@ -102,9 +132,8 @@
             </form>
         </div>
 
-        <!-- قسم عرض المنتجات والطلبات -->
+        <!-- قسم عرض المنتجات الحالية -->
         <div style="display: flex; flex-direction: column; gap: 30px;">
-            <!-- إدارة المنتجات -->
             <div class="card">
                 <h2>📦 المنتجات الحالية في المتجر</h2>
                 <div class="table-responsive">
@@ -124,23 +153,31 @@
                     </table>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- إدارة الطلبات الواردة (مجمعة لكل عميل مع دعم الكميات التلقائية) -->
-            <div class="card">
-                <h2>
-                    🛍️ الطلبات الواردة (حسب العملاء)
-                    <button id="clearAllOrdersBtn" class="btn-danger-sm">مسح كل الطلبات</button>
-                </h2>
+    <!-- نافذة الطلبات المنبثقة الكبيرة والمتناسقة -->
+    <div id="ordersModalOverlay" class="orders-overlay">
+        <div class="orders-modal-box">
+            <div class="modal-header">
+                <h2>🛍️ الطلبات الواردة حالياً (حسب العملاء)</h2>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <button id="clearAllOrdersBtn" class="btn-danger-sm" style="padding: 8px 16px;">مسح كل الطلبات</button>
+                    <button id="closeOrdersBtn" class="btn-close-modal">إغلاق ❌</button>
+                </div>
+            </div>
+            
+            <div class="modal-body-scroll">
                 <div class="table-responsive">
-                    <table>
+                    <table style="font-size: 1rem;">
                         <thead>
                             <tr>
-                                <th>العميل</th>
-                                <th>الهاتف</th>
-                                <th>المنتجات المطلوبة</th>
-                                <th>الإجمالي</th>
-                                <th>العنوان</th>
-                                <th>إجراء</th>
+                                <th style="width: 15%;">العميل</th>
+                                <th style="width: 15%;">الهاتف</th>
+                                <th style="width: 35%;">المنتجات المطلوبة</th>
+                                <th style="width: 12%;">الإجمالي</th>
+                                <th style="width: 13%;">العنوان</th>
+                                <th style="width: 10%;">إجراء</th>
                             </tr>
                         </thead>
                         <tbody id="adminOrdersTable">
@@ -176,6 +213,10 @@
         const adminOrdersTable = document.getElementById('adminOrdersTable');
         const saveBtn = document.getElementById('saveBtn');
         const clearAllOrdersBtn = document.getElementById('clearAllOrdersBtn');
+        
+        const openOrdersBtn = document.getElementById('openOrdersBtn');
+        const closeOrdersBtn = document.getElementById('closeOrdersBtn');
+        const ordersModalOverlay = document.getElementById('ordersModalOverlay');
 
         function showToast(message) {
             const toast = document.getElementById('toast');
@@ -183,6 +224,10 @@
             toast.style.display = 'block';
             setTimeout(() => { toast.style.display = 'none'; }, 2500);
         }
+
+        openOrdersBtn.addEventListener('click', () => { ordersModalOverlay.style.display = "flex"; });
+        closeOrdersBtn.addEventListener('click', () => { ordersModalOverlay.style.display = "none"; });
+        ordersModalOverlay.addEventListener('click', (e) => { if(e.target === ordersModalOverlay) ordersModalOverlay.style.display = "none"; });
 
         function compressImage(file, maxWidth = 300, quality = 0.7) {
             return new Promise((resolve) => {
@@ -280,7 +325,6 @@
             }
         };
 
-        // تجميع الطلبات بناءً على رقم هاتف العميل مع دعم حساب الكميات
         onSnapshot(query(collection(db, "orders"), orderBy("timestamp", "desc")), (snapshot) => {
             let html = "";
             if (snapshot.empty) {
@@ -307,7 +351,7 @@
                     orderId: docSnap.id,
                     productName: data.productName,
                     price: parseFloat(data.price) || 0,
-                    quantity: parseInt(data.quantity) || 1 // قراءة الكمية هنا
+                    quantity: parseInt(data.quantity) || 1
                 });
             });
 
@@ -318,12 +362,11 @@
                 let orderIdsForThisCustomer = [];
 
                 cust.items.forEach(item => {
-                    totalPrice += (item.price * item.quantity); // حساب حاصل ضرب السعر في الكمية
+                    totalPrice += (item.price * item.quantity);
                     orderIdsForThisCustomer.push(item.orderId);
                     
-                    // إظهار عدد القطع المطلوبة بجوار الاسم إذا كانت أكثر من قطعة
-                    const quantityText = item.quantity > 1 ? ` (العدد: ${item.quantity})` : '';
-                    productsListHtml += `<span class="order-badge">📦 ${item.productName}${quantityText}</span><br>`;
+                    const qtyText = item.quantity > 1 ? ` (العدد: ${item.quantity})` : '';
+                    productsListHtml += `<span class="order-badge">📦 ${item.productName}${qtyText}</span> `;
                 });
 
                 html += `
@@ -331,11 +374,13 @@
                         <td><strong>${cust.name}</strong></td>
                         <td>${cust.phone}</td>
                         <td>${productsListHtml}</td>
-                        <td><strong>${totalPrice.toFixed(1)} جنيه</strong></td>
+                        <td><strong style="color: #4a2c11;">${totalPrice.toFixed(1)} جنيه</strong></td>
                         <td>${cust.address}</td>
                         <td>
-                            <a href="tel:${cust.phone}" class="btn-call-sm">📞 اتصال</a>
-                            <button class="btn-danger-sm" onclick="deleteCustomerOrders(['${orderIdsForThisCustomer.join("','")}'])">مسح طلباته</button>
+                            <div style="display: flex; gap: 4px;">
+                                <a href="tel:${cust.phone}" class="btn-call-sm">📞 اتصال</a>
+                                <button class="btn-danger-sm" onclick="deleteCustomerOrders(['${orderIdsForThisCustomer.join("','")}'])">حذف</button>
+                            </div>
                         </td>
                     </tr>
                 `;
